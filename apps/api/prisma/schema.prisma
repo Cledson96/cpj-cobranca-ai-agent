@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum FlowType {
+  review
+  compliance
+  document
+  tests
+}
+
+enum ExecutionFlowType {
+  review
+  compliance
+  document
+  tests
+  batch
+}
+
+enum ExecutionStatus {
+  success
+  failed
+}
+
+enum ResponseFormatMode {
+  json_schema
+  json_object
+}
+
+model Execution {
+  id                    String            @id @default(uuid())
+  createdAt             DateTime          @default(now())
+  flowType              ExecutionFlowType
+  status                ExecutionStatus
+  inputPayload          Json
+  outputPayload         Json?
+  errorMessage          String?
+  durationMs            Int
+  requestHash           String
+  promptTemplateId      String?
+  promptTemplateVersion Int?
+  modelRequested        String
+  modelUsed             String?
+  provider              String            @default("openrouter")
+  generationId          String?
+  promptTokens          Int?
+  completionTokens      Int?
+  totalTokens           Int?
+  reasoningTokens       Int?
+  cachedTokens          Int?
+  costUsd               Decimal?
+  promptTemplate        PromptTemplate?   @relation(fields: [promptTemplateId], references: [id])
+
+  @@index([createdAt])
+  @@index([flowType, status])
+  @@index([requestHash])
+}
+
+model PromptTemplate {
+  id                 String      @id @default(uuid())
+  flowType           FlowType
+  name               String
+  version            Int
+  isActive           Boolean     @default(false)
+  systemTemplate     String
+  userTemplate       String
+  responseSchemaName String
+  notes              String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  executions         Execution[]
+
+  @@unique([flowType, version])
+  @@index([flowType, isActive])
+}
+
+model FlowModelSetting {
+  id                 String             @id @default(uuid())
+  flowType           FlowType           @unique
+  primaryModel       String
+  fallbackModels     Json
+  temperature        Decimal
+  maxTokens          Int
+  responseFormatMode ResponseFormatMode
+  updatedAt          DateTime           @updatedAt
+}
+
+model OpenRouterModel {
+  id                  String   @id
+  name                String
+  contextLength       Int?
+  promptPrice         Decimal?
+  completionPrice     Decimal?
+  requestPrice        Decimal?
+  supportedParameters Json
+  rawMetadata         Json
+  syncedAt            DateTime @default(now())
+}
+
+model UsageDailyAggregate {
+  id               String    @id @default(uuid())
+  day              DateTime
+  flowType         FlowType?
+  modelUsed        String?
+  requestCount     Int       @default(0)
+  successCount     Int       @default(0)
+  failedCount      Int       @default(0)
+  promptTokens     Int       @default(0)
+  completionTokens Int       @default(0)
+  totalTokens      Int       @default(0)
+  costUsd          Decimal   @default(0)
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([day, flowType, modelUsed])
+}
