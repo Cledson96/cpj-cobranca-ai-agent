@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+apps/api/prisma/dev.db
+apps/api/prisma/dev.db-journal
+
+# Local files
+*.docx
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
