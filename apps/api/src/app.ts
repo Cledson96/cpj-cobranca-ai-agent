@@ -1,9 +1,9 @@
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
-import { CompressionMiddleware } from "./api/classes/CompressionMiddleware.js";
-import { ErrorHandlerMiddleware } from "./api/classes/ErrorHandlerMiddleware.js";
-import { RateLimitMiddleware } from "./api/classes/RateLimitMiddleware.js";
-import { RequestContextMiddleware } from "./api/classes/RequestContextMiddleware.js";
-import { SecurityMiddleware } from "./api/classes/SecurityMiddleware.js";
+import { CompressionMiddleware } from "./api/classes/compression.middleware.js";
+import { ErrorHandlerMiddleware } from "./api/classes/error-handler.middleware.js";
+import { RateLimitMiddleware } from "./api/classes/rate-limit.middleware.js";
+import { RequestContextMiddleware } from "./api/classes/request-context.middleware.js";
+import { SecurityMiddleware } from "./api/classes/security.middleware.js";
 import { type AppEnv, loadEnv } from "./config/env.js";
 import { registerPrismaPlugin } from "./plugins/prisma.js";
 import { registerAdminRoutes, type AdminRouteDependencies } from "./routes/admin.routes.js";

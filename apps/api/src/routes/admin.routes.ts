@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { RateLimitMiddleware } from "../api/classes/RateLimitMiddleware.js";
+import { RateLimitMiddleware } from "../api/classes/rate-limit.middleware.js";
 import { type AppEnv, loadEnv } from "../config/env.js";
 import { AdminController } from "../controllers/admin.controller.js";
 import { AdminService } from "../modules/admin/admin.service.js";
