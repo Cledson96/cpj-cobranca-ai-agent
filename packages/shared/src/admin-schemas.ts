@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { flowTypeSchema, responseSchemaNameSchema } from "./flow-types";
+import { flowTypeSchema, responseSchemaNameSchema } from "./flow-types.js";
 
 const nonEmptyString = z.string().trim().min(1);
 

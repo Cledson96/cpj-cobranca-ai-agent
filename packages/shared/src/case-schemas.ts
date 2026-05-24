@@ -4,7 +4,7 @@ import {
   executionFlowTypeSchema,
   executionStatusSchema,
   supportedLanguageSchema,
-} from "./flow-types";
+} from "./flow-types.js";
 
 const nonEmptyString = z.string().trim().min(1);
 

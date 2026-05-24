@@ -1,4 +1,9 @@
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+import { config as loadDotenv } from "dotenv";
 import { z } from "zod";
+
+loadLocalEnvFiles();
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -20,4 +25,17 @@ export type AppEnv = z.infer<typeof envSchema>;
 
 export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
   return envSchema.parse(source);
+}
+
+function loadLocalEnvFiles(): void {
+  const candidates = [
+    resolve(process.cwd(), ".env"),
+    resolve(process.cwd(), "..", "..", ".env"),
+  ];
+
+  for (const envPath of [...new Set(candidates)]) {
+    if (existsSync(envPath)) {
+      loadDotenv({ path: envPath, override: false });
+    }
+  }
 }

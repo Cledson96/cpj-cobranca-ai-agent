@@ -1,0 +1,45 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      DATABASE_URL: file:/data/dev.db
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_DEFAULT_MODEL: ${OPENROUTER_DEFAULT_MODEL:-openai/gpt-4o-mini}
+      OPENROUTER_SITE_URL: ${OPENROUTER_SITE_URL:-http://localhost:3001}
+      OPENROUTER_APP_TITLE: ${OPENROUTER_APP_TITLE:-CPJ Cobranca AI Agent}
+      OPENROUTER_FETCH_GENERATION_STATS: ${OPENROUTER_FETCH_GENERATION_STATS:-true}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-change-me-local-admin-token}
+    ports:
+      - "3000:3000"
+    volumes:
+      - api-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3000}
+        NEXT_PUBLIC_ADMIN_APP_NAME: ${NEXT_PUBLIC_ADMIN_APP_NAME:-CPJ Cobranca AI Agent}
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      HOSTNAME: 0.0.0.0
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+
+volumes:
+  api-data:
