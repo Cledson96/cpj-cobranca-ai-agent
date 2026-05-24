@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyReply } from "fastify";
+import type { FastifyInstance } from "fastify";
 import {
   complianceRequestSchema,
   documentRequestSchema,
@@ -6,8 +6,8 @@ import {
   testsRequestSchema,
 } from "@cpj-cobranca/shared/case-schemas";
 import type { FlowType } from "@cpj-cobranca/shared/flow-types";
-import type { z } from "zod";
 import { loadEnv } from "../config/env.js";
+import { AgentController } from "../controllers/agent.controller.js";
 import { AgentService } from "../modules/agent/agent.service.js";
 import { OpenRouterClient } from "../modules/llm/openrouter.client.js";
 import { UsageService } from "../modules/llm/usage.service.js";
@@ -29,24 +29,12 @@ export async function registerAgentRoutes(
   dependencies: AgentRouteDependencies = {},
 ): Promise<void> {
   const agentService = dependencies.agentService ?? createDefaultAgentService(app);
+  const controller = new AgentController(agentService);
 
   for (const route of routes) {
-    app.post(`/api/v1/${route.method}`, async (request, reply) => {
-      const parsed = route.schema.safeParse(request.body);
-      if (!parsed.success) {
-        return sendValidationError(reply, parsed.error);
-      }
-
-      try {
-        return await agentService.execute(route.method as FlowType, parsed.data);
-      } catch (error) {
-        request.log.error({ error }, "agent route failed");
-        return reply.status(500).send({
-          error: "agent_execution_failed",
-          message: error instanceof Error ? error.message : "Erro inesperado",
-        });
-      }
-    });
+    app.post(`/api/v1/${route.method}`, async (request, reply) =>
+      controller.execute(route.method as FlowType, route.schema, request, reply),
+    );
   }
 }
 
@@ -62,12 +50,5 @@ function createDefaultAgentService(app: FastifyInstance): AgentService {
       fetchGenerationStats: env.OPENROUTER_FETCH_GENERATION_STATS,
     }),
     usageService: new UsageService(app.prisma),
-  });
-}
-
-function sendValidationError(reply: FastifyReply, error: z.ZodError): FastifyReply {
-  return reply.status(400).send({
-    error: "invalid_request",
-    details: error.flatten(),
   });
 }

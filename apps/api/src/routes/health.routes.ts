@@ -1,6 +1,9 @@
 import type { FastifyInstance } from "fastify";
+import { HealthController } from "../controllers/health.controller.js";
 
 export async function registerHealthRoutes(app: FastifyInstance): Promise<void> {
+  const controller = new HealthController();
+
   app.get(
     "/health",
     {
@@ -18,10 +21,6 @@ export async function registerHealthRoutes(app: FastifyInstance): Promise<void> 
         },
       },
     },
-    async () => ({
-      status: "ok",
-      service: "cpj-cobranca-ai-agent",
-      timestamp: new Date().toISOString(),
-    }),
+    async () => controller.show(),
   );
 }

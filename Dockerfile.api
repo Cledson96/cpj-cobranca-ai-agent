@@ -21,6 +21,7 @@ RUN npm run prisma:generate --workspace @cpj-cobranca/api
 RUN npm run build --workspace @cpj-cobranca/api
 
 ENV NODE_ENV=production
+ENV HOST=0.0.0.0
 ENV PORT=3000
 ENV DATABASE_URL=file:/data/dev.db
 

@@ -1,11 +1,7 @@
-import type { FastifyInstance, FastifyReply } from "fastify";
-import {
-  flowModelSettingUpdateSchema,
-  promptTemplateCreateSchema,
-} from "@cpj-cobranca/shared/admin-schemas";
-import { flowTypeSchema } from "@cpj-cobranca/shared/flow-types";
-import { z } from "zod";
-import { loadEnv } from "../config/env.js";
+import type { FastifyInstance } from "fastify";
+import { RateLimitMiddleware } from "../api/classes/RateLimitMiddleware.js";
+import { type AppEnv, loadEnv } from "../config/env.js";
+import { AdminController } from "../controllers/admin.controller.js";
 import { AdminService } from "../modules/admin/admin.service.js";
 import { ExecutionRepository } from "../modules/executions/execution.repository.js";
 import { ModelCatalogService } from "../modules/llm/model-catalog.service.js";
@@ -28,88 +24,53 @@ export type AdminRouteDependencies = {
     | "getExecutionDetail"
   >;
   adminToken?: string;
+  env?: AppEnv;
 };
-
-const idParamsSchema = z.object({ id: z.string().min(1) });
-const flowParamsSchema = z.object({ flowType: flowTypeSchema });
-const usageQuerySchema = z.object({
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-});
 
 export async function registerAdminRoutes(
   app: FastifyInstance,
   dependencies: AdminRouteDependencies = {},
 ): Promise<void> {
-  const env = loadEnv();
+  const env = dependencies.env ?? loadEnv();
   const adminService = dependencies.adminService ?? createDefaultAdminService(app);
+  const adminToken = dependencies.adminToken ?? env.ADMIN_TOKEN;
+  const controller = new AdminController(adminService);
 
-  await app.register(registerAdminAuth, {
-    token: dependencies.adminToken ?? env.ADMIN_TOKEN,
+  app.register(registerAdminAuth, {
+    token: adminToken,
   });
+  RateLimitMiddleware.registerAdmin(app, env, adminToken);
 
-  app.get("/api/admin/prompt-templates", async () => adminService.listPromptTemplates());
+  app.register(async (adminApp) => {
+    adminApp.get("/api/admin/prompt-templates", async () => controller.listPromptTemplates());
 
-  app.post("/api/admin/prompt-templates", async (request, reply) => {
-    const parsed = promptTemplateCreateSchema.safeParse(request.body);
-    if (!parsed.success) {
-      return sendValidationError(reply, parsed.error);
-    }
+    adminApp.post("/api/admin/prompt-templates", async (request, reply) =>
+      controller.createPromptTemplate(request, reply),
+    );
 
-    return reply.status(201).send(await adminService.createPromptTemplate(parsed.data));
-  });
+    adminApp.post("/api/admin/prompt-templates/:id/activate", async (request, reply) =>
+      controller.activatePromptTemplate(request, reply),
+    );
 
-  app.post("/api/admin/prompt-templates/:id/activate", async (request, reply) => {
-    const parsed = idParamsSchema.safeParse(request.params);
-    if (!parsed.success) {
-      return sendValidationError(reply, parsed.error);
-    }
+    adminApp.get("/api/admin/flow-settings", async () => controller.listFlowSettings());
 
-    return adminService.activatePromptTemplate(parsed.data.id);
-  });
+    adminApp.put("/api/admin/flow-settings/:flowType", async (request, reply) =>
+      controller.updateFlowSetting(request, reply),
+    );
 
-  app.get("/api/admin/flow-settings", async () => adminService.listFlowSettings());
+    adminApp.post("/api/admin/models/sync", async () => controller.syncModels());
 
-  app.put("/api/admin/flow-settings/:flowType", async (request, reply) => {
-    const params = flowParamsSchema.safeParse(request.params);
-    const body = flowModelSettingUpdateSchema.safeParse(request.body);
-    if (!params.success) {
-      return sendValidationError(reply, params.error);
-    }
-    if (!body.success) {
-      return sendValidationError(reply, body.error);
-    }
+    adminApp.get("/api/admin/models", async () => controller.listModels());
 
-    return adminService.updateFlowSetting(params.data.flowType, body.data);
-  });
+    adminApp.get("/api/admin/usage/summary", async (request, reply) =>
+      controller.getUsageSummary(request, reply),
+    );
 
-  app.post("/api/admin/models/sync", async () => adminService.syncModels());
+    adminApp.get("/api/admin/executions", async () => controller.listExecutions());
 
-  app.get("/api/admin/models", async () => adminService.listModels());
-
-  app.get("/api/admin/usage/summary", async (request, reply) => {
-    const parsed = usageQuerySchema.safeParse(request.query);
-    if (!parsed.success) {
-      return sendValidationError(reply, parsed.error);
-    }
-
-    return adminService.getUsageSummary(parsed.data);
-  });
-
-  app.get("/api/admin/executions", async () => adminService.listExecutions(50));
-
-  app.get("/api/admin/executions/:id", async (request, reply) => {
-    const parsed = idParamsSchema.safeParse(request.params);
-    if (!parsed.success) {
-      return sendValidationError(reply, parsed.error);
-    }
-
-    const execution = await adminService.getExecutionDetail(parsed.data.id);
-    if (!execution) {
-      return reply.status(404).send({ error: "execution_not_found" });
-    }
-
-    return execution;
+    adminApp.get("/api/admin/executions/:id", async (request, reply) =>
+      controller.getExecutionDetail(request, reply),
+    );
   });
 }
 
@@ -130,11 +91,4 @@ function createDefaultAdminService(app: FastifyInstance): AdminService {
     new ModelCatalogService(app.prisma, openRouterClient),
     historyRepository,
   );
-}
-
-function sendValidationError(reply: FastifyReply, error: z.ZodError): FastifyReply {
-  return reply.status(400).send({
-    error: "invalid_request",
-    details: error.flatten(),
-  });
 }
