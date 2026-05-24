@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { App, buildApp } from "../src/app";
-import { loadEnv } from "../src/config/env";
+import { App, buildApp } from "@/app";
+import { loadEnv } from "@/shared/config/env";
 
 function createDependencies() {
   const agentService = {

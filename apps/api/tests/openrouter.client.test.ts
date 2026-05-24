@@ -3,7 +3,7 @@ import {
   OpenRouterClient,
   OpenRouterConfigurationError,
   OpenRouterHttpError,
-} from "../src/modules/llm/openrouter.client";
+} from "@/infrastructure/llm/openrouter.client";
 
 const baseConfig = {
   apiKey: "test-key",

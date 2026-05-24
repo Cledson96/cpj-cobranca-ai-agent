@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import type { ExecutionRepository } from "../modules/executions/execution.repository.js";
+import type { ExecutionRepository } from "@/modules/history/execution.repository.js";
 
 const idParamsSchema = z.object({
   id: z.string().uuid(),

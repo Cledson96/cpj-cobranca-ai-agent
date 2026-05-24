@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type { z } from "zod";
 import type { FlowType } from "@cpj-cobranca/shared/flow-types";
-import type { AgentService } from "../modules/agent/agent.service.js";
+import type { AgentService } from "@/modules/agent/agent.service.js";
 
 export class AgentController {
   constructor(private readonly agentService: Pick<AgentService, "execute">) {}

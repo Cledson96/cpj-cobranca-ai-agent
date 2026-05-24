@@ -6,12 +6,12 @@ import {
   testsRequestSchema,
 } from "@cpj-cobranca/shared/case-schemas";
 import type { FlowType } from "@cpj-cobranca/shared/flow-types";
-import { loadEnv } from "../config/env.js";
-import { AgentController } from "../controllers/agent.controller.js";
-import { AgentService } from "../modules/agent/agent.service.js";
-import { OpenRouterClient } from "../modules/llm/openrouter.client.js";
-import { UsageService } from "../modules/llm/usage.service.js";
-import { PromptTemplateService } from "../modules/prompts/prompt-template.service.js";
+import { loadEnv } from "@/shared/config/env.js";
+import { AgentController } from "@/modules/agent/agent.controller.js";
+import { AgentService } from "@/modules/agent/agent.service.js";
+import { OpenRouterClient } from "@/infrastructure/llm/openrouter.client.js";
+import { UsageService } from "@/modules/models/usage.service.js";
+import { PromptTemplateService } from "@/modules/prompts/prompt-template.service.js";
 
 export type AgentRouteDependencies = {
   agentService?: Pick<AgentService, "execute">;

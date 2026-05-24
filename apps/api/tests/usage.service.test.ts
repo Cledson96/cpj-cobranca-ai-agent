@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { UsageService } from "../src/modules/llm/usage.service";
+import { UsageService } from "@/modules/models/usage.service";
 
 describe("UsageService", () => {
   it("increments daily aggregate buckets from execution telemetry", async () => {

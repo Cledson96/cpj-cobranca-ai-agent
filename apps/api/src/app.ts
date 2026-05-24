@@ -1,15 +1,17 @@
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
-import { CompressionMiddleware } from "./api/classes/compression.middleware.js";
-import { ErrorHandlerMiddleware } from "./api/classes/error-handler.middleware.js";
-import { RateLimitMiddleware } from "./api/classes/rate-limit.middleware.js";
-import { RequestContextMiddleware } from "./api/classes/request-context.middleware.js";
-import { SecurityMiddleware } from "./api/classes/security.middleware.js";
-import { type AppEnv, loadEnv } from "./config/env.js";
-import { registerPrismaPlugin } from "./plugins/prisma.js";
-import { registerAdminRoutes, type AdminRouteDependencies } from "./routes/admin.routes.js";
-import { registerAgentRoutes, type AgentRouteDependencies } from "./routes/agent.routes.js";
-import { registerHistoryRoutes, type HistoryRouteDependencies } from "./routes/history.routes.js";
-import { registerHealthRoutes } from "./routes/health.routes.js";
+import { type AppEnv, loadEnv } from "@/shared/config/index.js";
+import {
+  CompressionMiddleware,
+  ErrorHandlerMiddleware,
+  RateLimitMiddleware,
+  RequestContextMiddleware,
+  SecurityMiddleware,
+} from "@/shared/middlewares/index.js";
+import { registerPrismaPlugin } from "@/infrastructure/database/index.js";
+import { registerAdminRoutes, type AdminRouteDependencies } from "@/modules/admin/index.js";
+import { registerAgentRoutes, type AgentRouteDependencies } from "@/modules/agent/index.js";
+import { registerHistoryRoutes, type HistoryRouteDependencies } from "@/modules/history/index.js";
+import { registerHealthRoutes } from "@/modules/health/index.js";
 
 export type AppDependencies = AgentRouteDependencies & HistoryRouteDependencies & AdminRouteDependencies;
 

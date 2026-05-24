@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   buildSeedFlowModelSettings,
   buildSeedPromptTemplates,
-} from "../src/modules/prompts/seed-templates.js";
+} from "@/modules/prompts/seed-templates.js";
 
 const prisma = new PrismaClient();
 

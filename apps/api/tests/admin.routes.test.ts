@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildApp } from "../src/app";
+import { buildApp } from "@/app";
 
 function createAdminService() {
   return {

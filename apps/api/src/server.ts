@@ -1,5 +1,5 @@
-import { App } from "./app.js";
-import { loadEnv } from "./config/env.js";
+import { App } from "@/app.js";
+import { loadEnv } from "@/shared/config/index.js";
 
 const env = loadEnv();
 const app = new App({

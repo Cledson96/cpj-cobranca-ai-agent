@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { ModelCatalogService } from "../src/modules/llm/model-catalog.service";
-import type { OpenRouterClient } from "../src/modules/llm/openrouter.client";
+import { ModelCatalogService } from "@/modules/models/model-catalog.service";
+import type { OpenRouterClient } from "@/infrastructure/llm/openrouter.client";
 
 describe("ModelCatalogService", () => {
   it("syncs OpenRouter model metadata into Prisma", async () => {

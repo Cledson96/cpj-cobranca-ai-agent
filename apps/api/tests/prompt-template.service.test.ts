@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { PromptTemplateService } from "../src/modules/prompts/prompt-template.service";
+import { PromptTemplateService } from "@/modules/prompts/prompt-template.service";
 
 const activeTemplate = {
   id: "7b3f0b8d-82bd-4ec4-9091-22e6fcf1d1e2",

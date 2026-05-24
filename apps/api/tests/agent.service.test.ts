@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Prisma } from "@prisma/client";
-import { AgentService } from "../src/modules/agent/agent.service";
+import { AgentService } from "@/modules/agent/agent.service";
 
 const renderedTemplate = {
   template: {

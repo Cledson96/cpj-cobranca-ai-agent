@@ -5,15 +5,15 @@ import type {
   OpenRouterChatCompletionResult,
   OpenRouterClient,
   OpenRouterMessage,
-} from "../llm/openrouter.client.js";
-import { UsageService } from "../llm/usage.service.js";
-import type { RenderedPromptTemplate, PromptTemplateService } from "../prompts/prompt-template.service.js";
+} from "@/infrastructure/llm/openrouter.client.js";
+import { UsageService } from "@/modules/models/usage.service.js";
+import type { RenderedPromptTemplate, PromptTemplateService } from "@/modules/prompts/prompt-template.service.js";
 import {
   OutputValidationError,
   buildResponseJsonSchema,
   parseAgentOutput,
-} from "./output-parser.js";
-import { runAgentGraph } from "./agent.graph.js";
+} from "@/modules/agent/output-parser.js";
+import { runAgentGraph } from "@/modules/agent/agent.graph.js";
 
 type PrismaLike = Pick<PrismaClient, "flowModelSetting" | "execution">;
 

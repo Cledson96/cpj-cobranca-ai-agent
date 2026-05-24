@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loadEnv } from "../src/config/env";
+import { loadEnv } from "@/shared/config/env";
 
 describe("loadEnv", () => {
   it("uses safe defaults for local development", () => {

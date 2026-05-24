@@ -1,13 +1,13 @@
 import type { FastifyInstance } from "fastify";
-import { RateLimitMiddleware } from "../api/classes/rate-limit.middleware.js";
-import { type AppEnv, loadEnv } from "../config/env.js";
-import { AdminController } from "../controllers/admin.controller.js";
-import { AdminService } from "../modules/admin/admin.service.js";
-import { ExecutionRepository } from "../modules/executions/execution.repository.js";
-import { ModelCatalogService } from "../modules/llm/model-catalog.service.js";
-import { OpenRouterClient } from "../modules/llm/openrouter.client.js";
-import { PromptTemplateService } from "../modules/prompts/prompt-template.service.js";
-import { registerAdminAuth } from "../plugins/admin-auth.js";
+import { RateLimitMiddleware } from "@/shared/middlewares/rate-limit.middleware.js";
+import { type AppEnv, loadEnv } from "@/shared/config/env.js";
+import { AdminController } from "@/modules/admin/admin.controller.js";
+import { AdminService } from "@/modules/admin/admin.service.js";
+import { ExecutionRepository } from "@/modules/history/execution.repository.js";
+import { OpenRouterClient } from "@/infrastructure/llm/openrouter.client.js";
+import { ModelCatalogService } from "@/modules/models/model-catalog.service.js";
+import { PromptTemplateService } from "@/modules/prompts/prompt-template.service.js";
+import { registerAdminAuth } from "@/plugins/admin-auth.js";
 
 export type AdminRouteDependencies = {
   adminService?: Pick<

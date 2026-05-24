@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { HealthController } from "../controllers/health.controller.js";
+import { HealthController } from "@/modules/health/health.controller.js";
 
 export async function registerHealthRoutes(app: FastifyInstance): Promise<void> {
   const controller = new HealthController();

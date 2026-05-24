@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildSeedFlowModelSettings,
   buildSeedPromptTemplates,
-} from "../src/modules/prompts/seed-templates";
+} from "@/modules/prompts/seed-templates";
 
 describe("seed templates", () => {
   it("creates one active versioned prompt template per agent flow", () => {

@@ -1,7 +1,7 @@
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import type { FastifyInstance } from "fastify";
-import type { AppEnv } from "../../config/env.js";
+import type { AppEnv } from "@/shared/config/env.js";
 
 export class SecurityMiddleware {
   static register(app: FastifyInstance, env: AppEnv): void {

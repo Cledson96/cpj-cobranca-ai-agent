@@ -4,9 +4,9 @@ import type {
   PromptTemplateCreate,
 } from "@cpj-cobranca/shared/admin-schemas";
 import type { FlowType } from "@cpj-cobranca/shared/flow-types";
-import type { ExecutionRepository } from "../executions/execution.repository.js";
-import type { ModelCatalogService } from "../llm/model-catalog.service.js";
-import type { PromptTemplateService } from "../prompts/prompt-template.service.js";
+import type { ExecutionRepository } from "@/modules/history/execution.repository.js";
+import type { ModelCatalogService } from "@/modules/models/model-catalog.service.js";
+import type { PromptTemplateService } from "@/modules/prompts/prompt-template.service.js";
 
 type PrismaLike = Pick<PrismaClient, "flowModelSetting" | "execution">;
 

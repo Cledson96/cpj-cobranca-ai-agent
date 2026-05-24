@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildApp } from "../src/app";
+import { buildApp } from "@/app";
 
 describe("Prisma plugin", () => {
   it("decorates the Fastify app with a Prisma client", async () => {

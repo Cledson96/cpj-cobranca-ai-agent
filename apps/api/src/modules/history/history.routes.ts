@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
-import { HistoryController } from "../controllers/history.controller.js";
-import { ExecutionRepository } from "../modules/executions/execution.repository.js";
+import { HistoryController } from "@/modules/history/history.controller.js";
+import { ExecutionRepository } from "@/modules/history/execution.repository.js";
 
 export type HistoryRouteDependencies = {
   historyRepository?: Pick<ExecutionRepository, "listLatest" | "getById">;

@@ -5,7 +5,7 @@ import {
 } from "@cpj-cobranca/shared/admin-schemas";
 import { flowTypeSchema } from "@cpj-cobranca/shared/flow-types";
 import { z } from "zod";
-import type { AdminService } from "../modules/admin/admin.service.js";
+import type { AdminService } from "@/modules/admin/admin.service.js";
 
 const idParamsSchema = z.object({ id: z.string().min(1) });
 const flowParamsSchema = z.object({ flowType: flowTypeSchema });

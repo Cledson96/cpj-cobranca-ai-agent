@@ -3,7 +3,7 @@ import {
   OutputValidationError,
   buildResponseJsonSchema,
   parseAgentOutput,
-} from "../src/modules/agent/output-parser";
+} from "@/modules/agent/output-parser";
 
 describe("output parser", () => {
   it("parses schema-valid JSON for a flow", () => {

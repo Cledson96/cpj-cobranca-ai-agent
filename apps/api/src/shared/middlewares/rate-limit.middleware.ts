@@ -1,6 +1,6 @@
 import rateLimit from "@fastify/rate-limit";
 import type { FastifyError, FastifyInstance, FastifyRequest } from "fastify";
-import type { AppEnv } from "../../config/env.js";
+import type { AppEnv } from "@/shared/config/env.js";
 
 export class RateLimitMiddleware {
   static registerGlobal(app: FastifyInstance, env: AppEnv): void {

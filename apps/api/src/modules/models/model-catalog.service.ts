@@ -1,5 +1,5 @@
 import { Prisma, type PrismaClient } from "@prisma/client";
-import type { OpenRouterClient, OpenRouterModelMetadata } from "./openrouter.client.js";
+import type { OpenRouterClient, OpenRouterModelMetadata } from "@/infrastructure/llm/openrouter.client.js";
 
 type PrismaLike = Pick<PrismaClient, "openRouterModel">;
 
