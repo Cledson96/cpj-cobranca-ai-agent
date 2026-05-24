@@ -10,6 +10,7 @@
     "start": "node dist/server.js",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "npm run typecheck",
     "prisma:generate": "cross-env RUST_LOG=info PRISMA_HIDE_UPDATE_MESSAGE=1 prisma generate --no-hints",
     "prisma:migrate": "cross-env RUST_LOG=info PRISMA_HIDE_UPDATE_MESSAGE=1 prisma migrate dev",
     "prisma:deploy": "cross-env RUST_LOG=info PRISMA_HIDE_UPDATE_MESSAGE=1 prisma migrate deploy",

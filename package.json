@@ -10,15 +10,21 @@
     "packages/shared"
   ],
   "scripts": {
+    "build:shared": "npm run build --workspace @cpj-cobranca/shared",
+    "predev": "npm run build:shared",
     "dev": "concurrently -n api,web -c cyan,green \"npm run dev --workspace @cpj-cobranca/api\" \"npm run dev --workspace @cpj-cobranca/web\"",
     "start": "concurrently -n api,web -c cyan,green \"npm run start --workspace @cpj-cobranca/api\" \"npm run start --workspace @cpj-cobranca/web\"",
+    "pretest": "npm run build:shared",
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "playwright test",
+    "pretypecheck": "npm run build:shared",
     "typecheck": "npm run typecheck --workspaces --if-present",
+    "prebuild": "npm run build:shared",
     "build": "npm run build --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "prisma:migrate": "npm run prisma:migrate --workspace @cpj-cobranca/api",
     "prisma:deploy": "npm run prisma:deploy --workspace @cpj-cobranca/api",
+    "preprisma:seed": "npm run build:shared",
     "prisma:seed": "npm run prisma:seed --workspace @cpj-cobranca/api"
   },
   "engines": {
