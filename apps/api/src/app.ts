@@ -1,3 +1,4 @@
+import cors from "@fastify/cors";
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
 import { registerPrismaPlugin } from "./plugins/prisma.js";
 import { registerAdminRoutes, type AdminRouteDependencies } from "./routes/admin.routes.js";
@@ -13,6 +14,9 @@ export function buildApp(
 ): FastifyInstance {
   const app = Fastify(options);
 
+  void app.register(cors, {
+    origin: true,
+  });
   void app.register(registerPrismaPlugin);
   void app.register(registerHealthRoutes);
   void app.register(registerAgentRoutes, dependencies);

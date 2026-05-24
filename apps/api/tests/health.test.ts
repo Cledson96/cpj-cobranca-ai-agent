@@ -25,4 +25,20 @@ describe("GET /health", () => {
     expect(body.service).toBe("cpj-cobranca-ai-agent");
     expect(new Date(body.timestamp).toISOString()).toBe(body.timestamp);
   });
+
+  it("allows requests from the Next.js admin origin", async () => {
+    const app = buildApp({ logger: false });
+
+    const response = await app.inject({
+      method: "GET",
+      url: "/health",
+      headers: {
+        origin: "http://localhost:3001",
+      },
+    });
+
+    await app.close();
+
+    expect(response.headers["access-control-allow-origin"]).toBe("http://localhost:3001");
+  });
 });
