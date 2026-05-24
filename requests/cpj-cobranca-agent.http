@@ -1,0 +1,64 @@
+@baseUrl = http://localhost:3000
+@adminToken = change-me-local-admin-token
+
+### Health
+GET {{baseUrl}}/health
+
+### Review de codigo
+POST {{baseUrl}}/api/v1/review
+Content-Type: application/json
+
+{
+  "code": "export async function buscarAcordos(db, devedorId) { return db.query(`select * from acordos where devedor_id = ${devedorId}`); }",
+  "language": "typescript",
+  "context": "Modulo de consulta de acordos da cobranca"
+}
+
+### Compliance com requisito
+POST {{baseUrl}}/api/v1/compliance
+Content-Type: application/json
+
+{
+  "task_description": "A API deve registrar tentativa de contato, validar devedor_id obrigatorio e gravar data/hora da tentativa.",
+  "code": "app.post('/contatos', async (req, res) => { await repo.save(req.body); return res.status(201).send(); })",
+  "language": "javascript"
+}
+
+### Documentacao tecnica
+POST {{baseUrl}}/api/v1/document
+Content-Type: application/json
+
+{
+  "code": "export function calcularAtraso(dataVencimento: Date, hoje = new Date()) { return Math.max(0, Math.floor((hoje.getTime() - dataVencimento.getTime()) / 86400000)); }",
+  "language": "typescript",
+  "doc_type": "technical"
+}
+
+### Geracao de testes
+POST {{baseUrl}}/api/v1/tests
+Content-Type: application/json
+
+{
+  "code": "export function calcularJurosSimples(valor, taxa, dias) { if (dias < 0) throw new Error('dias invalido'); return valor + valor * taxa * dias; }",
+  "language": "javascript",
+  "test_framework": "jest"
+}
+
+### Historico recente
+GET {{baseUrl}}/api/v1/history
+
+### Detalhe de execucao
+# Troque o id pelo valor retornado em /api/v1/history.
+GET {{baseUrl}}/api/v1/history/7d2d5c9b-2a2b-4ad9-8f98-9712b9a93a40
+
+### Admin: templates de prompt
+GET {{baseUrl}}/api/admin/prompt-templates
+x-admin-token: {{adminToken}}
+
+### Admin: modelos sincronizados
+GET {{baseUrl}}/api/admin/models
+x-admin-token: {{adminToken}}
+
+### Admin: resumo de uso
+GET {{baseUrl}}/api/admin/usage/summary
+x-admin-token: {{adminToken}}
