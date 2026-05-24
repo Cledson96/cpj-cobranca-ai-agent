@@ -24,6 +24,18 @@
   "engines": {
     "node": ">=22"
   },
+  "overrides": {
+    "@langchain/langgraph": {
+      "uuid": "^11.1.1"
+    },
+    "@langchain/langgraph-checkpoint": {
+      "uuid": "^11.1.1"
+    },
+    "@langchain/langgraph-sdk": {
+      "uuid": "^13.0.0"
+    },
+    "postcss": "^8.5.10"
+  },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "concurrently": "^9.2.1",
